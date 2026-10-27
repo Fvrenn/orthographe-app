@@ -1,0 +1,25 @@
+{
+  "name": "ortho",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Entraînement personnel à l'orthographe, hors connexion",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && node scripts/make-sw.mjs",
+    "serve": "node scripts/serve-out.mjs",
+    "check": "tsx scripts/check-content.ts",
+    "test": "tsx --test tests/srs.test.ts"
+  },
+  "dependencies": {
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
