@@ -46,7 +46,8 @@ export function QuestionView() {
   useEffect(() => { setVal(""); input.current?.focus(); }, [cid]);
   if (!ses || !cid) return null;
   const it = ITEMS[cid], r = RMAP[it.rule];
-  const useBtn = S.settings.mode === "boutons" && r.opts !== null;
+  // Dans le diagnostic, les choix possibles sont toujours affichés : une phrase à trou sans choix est indevinable.
+  const useBtn = (S.settings.mode === "boutons" || ses.kind === "diag") && r.opts !== null;
 
   const onSubmit = (e: FormEvent) => { e.preventDefault(); submit(val, false); };
   const insert = (ch: string) => {
