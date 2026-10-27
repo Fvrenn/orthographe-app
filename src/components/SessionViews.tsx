@@ -60,6 +60,7 @@ export function QuestionView() {
     <>
       <TopBar />
       <p className="tag">{ses.kind === "diag" ? "Diagnostic" : r.cat}{ses.retry[cid] ? " · à revoir" : ""}</p>
+      <p className="target">Règle testée : <b>{r.titre}</b></p>
       <p className="sent"><Sentence p={it.p} answer={firstAnswer(it)} filled={false} /></p>
       {ses.hint && <div className="test"><b>Astuce</b> {r.test}</div>}
       {useBtn ? (

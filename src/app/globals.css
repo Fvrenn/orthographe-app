@@ -70,6 +70,7 @@ small { color: var(--mute); }
 .hw { color: var(--mute); font-style: normal; font-size: .9em; }
 .blank { display: inline-block; min-width: 3.2em; border-bottom: 3px solid var(--brand); margin: 0 3px; transform: translateY(2px); }
 .blank.sm { min-width: 1.1em; margin: 0 1px; }
+.target { margin: 0 0 10px; padding: 8px 12px; border-radius: 10px; background: var(--test-bg); font-size: .95rem; }
 .fill { color: var(--ok); }
 .ok-note { background: var(--ok-bg); border-radius: 12px; padding: 12px 14px; color: var(--ink); }
 .ans {
