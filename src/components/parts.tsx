@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { Rule } from "@/lib/types";
-import type { RuleStatus } from "@/lib/srs";
+import { MASTERY, type Mastery, type RuleStatus } from "@/lib/srs";
 
 const LABEL: Record<RuleStatus, [string, string]> = {
   new: ["Nouvelle", "c-new"], learn: ["En cours", "c-learn"], weak: ["À travailler", "c-weak"], ok: ["Acquise", "c-ok"],
@@ -8,6 +8,11 @@ const LABEL: Record<RuleStatus, [string, string]> = {
 export function StatusChip({ status }: { status: RuleStatus }) {
   const [t, c] = LABEL[status];
   return <span className={`chip ${c}`}>{t}</span>;
+}
+
+/** Avancement vers l'acquisition : réussites et durée sur laquelle elles sont étalées. */
+export function MasteryLine({ m }: { m: Mastery }) {
+  return <>{Math.min(m.ok, MASTERY.ok)}/{MASTERY.ok} réussites · sur {Math.min(m.span, MASTERY.span)}/{MASTERY.span} jours</>;
 }
 
 /** Phrase à trou. `filled` affiche la bonne réponse à la place du trou. */
@@ -20,7 +25,7 @@ export function Sentence({ p, answer, filled }: { p: string; answer: string; fil
   return (
     <>
       {hw(before)}
-      {filled ? <b className="fill">{answer}</b> : <span className={"blank" + (attached ? " sm" : "")} />}
+      {filled ? <b className="fill">{before.trim() ? answer : answer.charAt(0).toUpperCase() + answer.slice(1)}</b> : <span className={"blank" + (attached ? " sm" : "")} />}
       {hw(apos ? after.replace(/^ /, "") : after)}
     </>
   );

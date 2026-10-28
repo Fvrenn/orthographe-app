@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CATS, RULES } from "@/lib/rules";
 import { rstat } from "@/lib/srs";
 import { useApp } from "@/lib/store";
-import { StatusChip } from "@/components/parts";
+import { MasteryLine, StatusChip } from "@/components/parts";
 
 export default function Regles() {
   const { S } = useApp();
@@ -17,7 +17,7 @@ export default function Regles() {
             const s = rstat(S, r);
             return (
               <Link key={r.id} href={`/regles/${r.id}/`} className="row">
-                <span><b>{r.titre}</b><small>{s.seen}/{s.total} vues</small></span>
+                <span><b>{r.titre}</b><small>{s.status === "new" ? `${r.items.length} phrases` : <MasteryLine m={s.m} />}</small></span>
                 <StatusChip status={s.status} />
               </Link>
             );

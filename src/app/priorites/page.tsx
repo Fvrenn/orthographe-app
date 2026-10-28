@@ -22,10 +22,10 @@ export default function Priorites() {
       <h1>À travailler</h1>
       {list.length ? (
         <>
-          <p className="note">Classé par taux d&apos;erreur, avec les cartes dues. Touche une règle pour t&apos;entraîner dessus.</p>
+          <p className="note">Classé par taux d&apos;erreur, avec les règles à réviser. Touche une règle pour t&apos;entraîner dessus.</p>
           {list.slice(0, 12).map((x) => (
-            <button key={x.r.id} className="row" onClick={() => { if (startSession("focus", { rule: x.r.id })) router.push("/seance/"); }}>
-              <span><b>{x.r.titre}</b><small>{Math.round(x.s.err * 100)} % d&apos;erreurs sur {x.s.n} essais · {x.s.due} à réviser</small></span>
+            <button key={x.r.id} className="row" onClick={() => { if (startSession("focus", { rules: [x.r.id] })) router.push("/seance/"); }}>
+              <span><b>{x.r.titre}</b><small>{Math.round(x.s.err * 100)} % d&apos;erreurs sur {x.s.n} essais {x.s.due ? " · à réviser" : ""}</small></span>
               <StatusChip status={x.s.status} />
             </button>
           ))}

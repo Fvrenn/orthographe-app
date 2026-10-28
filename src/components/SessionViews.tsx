@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { ITEMS, RMAP } from "@/lib/rules";
-import { shuffle } from "@/lib/srs";
+import { DAY, dueRules, shuffle } from "@/lib/srs";
 import { firstAnswer } from "@/lib/text";
 import { useApp } from "@/lib/store";
 import { RuleCard, Sentence } from "./parts";
@@ -60,7 +60,7 @@ export function QuestionView() {
     <>
       <TopBar />
       <p className="tag">{ses.kind === "diag" ? "Diagnostic" : r.cat}{ses.retry[cid] ? " · à revoir" : ""}</p>
-      <p className="target">Règle testée : <b>{r.titre}</b></p>
+      <p className="target">Règle testée : <b>{r.titre}</b>{it.lvl > 1 && <small> · niveau {it.lvl}</small>}</p>
       <p className="sent"><Sentence p={it.p} answer={firstAnswer(it)} filled={false} /></p>
       {ses.hint && <div className="test"><b>Astuce</b> {r.test}</div>}
       {useBtn ? (
@@ -109,7 +109,7 @@ export function FeedbackView() {
         <p className="rule"><b>{r.titre}</b><br />{r.regle}</p>
         {!ok && (<>
           <div className="test"><b>Astuce</b> {r.test}</div>
-          <p className="note">Cette carte reviendra tout à l&apos;heure, puis demain.</p>
+          <p className="note">{ses.kind === "diag" ? "Cette règle passe en tête de tes prochaines séances." : "La règle revient tout à l'heure avec une autre phrase, puis demain."}</p>
         </>)}
       </div>
       <button ref={btn} className="btn primary big" onClick={next}>Suivant</button>
@@ -122,20 +122,19 @@ export function SummaryView() {
   const router = useRouter();
   if (!ses) return null;
   const wrong = Object.keys(ses.wrong).map((id) => RMAP[id]).filter(Boolean);
-  const limit = new Date(); limit.setHours(0, 0, 0, 0);
-  const tomorrow = Object.keys(S.cards).filter((id) => ITEMS[id] && S.cards[id].d <= limit.getTime() + 2 * 86_400_000 - 1).length;
+  const tomorrow = dueRules(S, Date.now() + DAY).length;
   return (
     <>
       <h1>Séance terminée</h1>
       <div className="tiles">
         <div className="tile"><b>{ses.ok}</b><span>réussies du 1er coup</span></div>
         <div className="tile"><b>{ses.ko}</b><span>à revoir</span></div>
-        <div className="tile"><b>{tomorrow}</b><span>cartes d&apos;ici demain</span></div>
+        <div className="tile"><b>{tomorrow}</b><span>règle{tomorrow > 1 ? "s" : ""} à revoir demain</span></div>
       </div>
       {wrong.length ? (<>
         <h2>À retravailler</h2>
         {wrong.map((r) => (
-          <button key={r.id} className="row" onClick={() => { quit(); if (startSession("focus", { rule: r.id })) router.push("/seance/"); else router.push("/"); }}>
+          <button key={r.id} className="row" onClick={() => { quit(); if (startSession("focus", { rules: [r.id] })) router.push("/seance/"); else router.push("/"); }}>
             <span><b>{r.titre}</b><small>{r.cat}</small></span><i>›</i>
           </button>
         ))}
